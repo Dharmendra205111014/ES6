@@ -3,14 +3,12 @@
 
 //#Hoisting (The interesting thing about these is that they are “hoisted” to the top of their scope)
 //example 1
-
-a();
 function a() {
     console.log("hello");
 };
+a();
 
 //example 2
-
 a();
 function a() {
     console.log("hello");

@@ -1,0 +1,74 @@
+<!doctype>
+<html>
+    <head>
+        <title> Dom obj binding example</title>
+        <script>
+            // This function is specially to target input box only
+            // currently work with only one property bind, need to be inhenced
+            var domToObjBind = function(element, obj, property) {
+                element = typeof element === 'object' ? element : document.getElementById(element);
+                if (element && element.nodeName) {
+                    if(typeof obj === 'object') {
+                        obj[property] = obj[property] ? obj[property] : '';
+                        var d = obj.prototype ? obj.prototype : obj;
+                        obj.bindDom = obj.bindDom ? obj.bindDom : [];
+                        obj.bindDom.push(element);
+                        if(!obj.hasOwnProperty(property+'Bind')) {
+                            Object.defineProperty(d, property+'Bind', {
+                            get: function() { return this[property] },
+                            set: function(val) {
+                                    this[property] = val;
+                                    for(var i=0; i<this.bindDom.length; i++) {
+                                        this.bindDom[i].value = this[property];
+                                    }       
+                                }
+                            })
+                        }
+                    }
+                    element.addEventListener('keyup', function(){
+                        obj[property+'Bind'] = element.value;
+                       // console.info(obj);
+                    })
+                } else {
+                    console.error('dom element does not exist or not ready')
+                }
+            }
+        </script>
+    </head>
+    <body onload="readyMe()">
+        <div id="div1">
+            <input type="text" id="input1">
+        </div>
+        <p id="para"></p>
+        <div id="div2">
+                <input type="text" id="input2">
+        </div>
+        <input type="text" id="input3">
+    </body>
+    <script>
+       /* var data = {
+            _input : '',
+            get input() {return this._input;},
+            set input(i) {
+                this._input = i;
+                console.log(this._input);
+                input1.value = this._input;
+                //input2.value = this._input;
+            }
+        } */
+
+       // O = {
+         //       name: ''
+           // };
+
+        var Person = function(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+        var O = new Person("Dharmendra"); 
+        function readyMe() {
+            domToObjBind('input1', O, 'name');
+            domToObjBind('input2', O, 'name');
+            domToObjBind('input3', O, 'name');
+        }    </script>
+</html>
