@@ -23,7 +23,7 @@ Person.prototype.getName = function() {
 var Employee = function(name, salary) {
 	// will need to call base class to initialize properties
 	// But just initialization is not enough for complete inheritance
-	Person.call(this, salary);
+	Person.call(this, name);
 	this.salary = salary;
 };
 Employee.extends(Person);
